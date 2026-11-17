@@ -137,7 +137,7 @@ bool read_str(std::ifstream& file, std::string& s) {
     file.read(reinterpret_cast<char*>(&len), sizeof(len));
     if (!file) return {};
     s.resize(len);
-    return static_cast<bool>(file.read(s.data(), len));
+    return static_cast<bool>(file.read(const_cast<char*>(s.data()), len));
 }
 
 void write_student_name(std::ofstream& out, const Student_name& s) {
