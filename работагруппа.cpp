@@ -5,6 +5,7 @@
 #include <sstream>
 #include <cstdint>
 #include <algorithm>
+#include <iomanip>
 
 struct Student_name {
     int num;
@@ -39,7 +40,7 @@ struct Short_st {
     int group, num;
 };
 
-//⁄¡ƒ¡Œ…≈ ¡
+//Á‡‰‡ÌËÂ a
 void check_file(std::ifstream& file) {
     if (!file.is_open()) throw "file error open";
     if (file.peek() == EOF) throw "file error empty";
@@ -74,7 +75,7 @@ int return_size(std::ifstream& file) {
     return total;
 }
 
-Student_name* fill_mass1(std::ifstream& file, int size) {
+Student_name* fill_mass_name(std::ifstream& file, int size) {
     std::string delim = ",.;:?";
     std::string text = read_without_puncts(file, delim);
 
@@ -96,7 +97,7 @@ Student_name* fill_mass1(std::ifstream& file, int size) {
     return mass;
 }
 
-Student_marks* fill_mass2(std::ifstream& file, int size) {
+Student_marks* fill_mass_marks(std::ifstream& file, int size) {
     std::string delim = ",.;:?";
     std::string text = read_without_puncts(file, delim);
 
@@ -109,7 +110,7 @@ Student_marks* fill_mass2(std::ifstream& file, int size) {
 
     int temp = 0;
     while ((temp < size) && (iss >> group_num >> book_num >>
-                             w0 >> mark0 >> w1 >> mark1 >> w2 >> mark2)) {
+        w0 >> mark0 >> w1 >> mark1 >> w2 >> mark2)) {
         mass[temp].group = group_num;
         mass[temp].num = book_num;
 
@@ -178,19 +179,19 @@ bool read_student_marks(std::ifstream& in, Student_marks& s) {
     return true;
 }
 
-void fill_bin_file1(std::ofstream& out, Student_name* mass, int size) {
+void fill_bin_file_name(std::ofstream& out, Student_name* mass, int size) {
     for (int i{}; i < size; ++i) {
         write_student_name(out, mass[i]);
     }
 }
 
-void fill_bin_file2(std::ofstream& out, Student_marks* mass, int size) {
+void fill_bin_file_marks(std::ofstream& out, Student_marks* mass, int size) {
     for (int i{}; i < size; ++i) {
         write_student_marks(out, mass[i]);
     }
 }
 
-Student_name* bin_to_str1(std::ifstream& in, int size) {
+Student_name* bin_to_str_name(std::ifstream& in, int size) {
     Student_name* s = new Student_name[size]{};
     int i{};
     while ((i < size) && (read_student_name(in, s[i]))) {
@@ -199,7 +200,7 @@ Student_name* bin_to_str1(std::ifstream& in, int size) {
     return s;
 }
 
-Student_marks* bin_to_str2(std::ifstream& in, int size) {
+Student_marks* bin_to_str_marks(std::ifstream& in, int size) {
     Student_marks* s = new Student_marks[size]{};
     int i{};
     while ((i < size) && (read_student_marks(in, s[i]))) {
@@ -208,14 +209,14 @@ Student_marks* bin_to_str2(std::ifstream& in, int size) {
     return s;
 }
 
-void print_struct1(Student_name* s, int size) {
+void print_struct_name(Student_name* s, int size) {
     for (int i{}; i < size; ++i) {
         std::cout << s[i].num << " " << s[i].name << " " << s[i].surname
-        << " " << s[i].patr << " " << '\n';
+            << " " << s[i].patr << " " << '\n';
     }
 }
 
-void print_struct2(Student_marks* s, int size) {
+void print_struct_marks(Student_marks* s, int size) {
     for (int i{}; i < size; ++i) {
         std::cout << s[i].group << " " << s[i].num << " ";
         std::cout << s[i].subj[0] << " " << s[i].marks[0] << " ";
@@ -305,12 +306,23 @@ double avg(int* mass, int len) {
     return total / len;
 }
 
-void fill_bin_file_with_avg(std::ofstream& out, Student* mass, int size) {
-    int len = sizeof(mass[0].marks) / sizeof(mass[0].marks[0]);
-    for (int i{}; i < size; ++i) {
-        write_student(out, mass[i]);
-        double avg_marks = avg(mass[i].marks, len);
-        out.write(reinterpret_cast<const char*>(&avg_marks), sizeof(avg_marks));
+void write_long_st(std::ofstream& out, const Long_st& s) {
+    write_str(out, s.surname);
+    out.write(reinterpret_cast<const char*>(&s.group), sizeof(s.group));
+    out.write(reinterpret_cast<const char*>(&s.num), sizeof(s.num));
+
+    int len = sizeof(s.marks) / sizeof(s.marks[0]);
+    for (int i = 0; i < len; ++i) {
+        write_str(out, s.subj[i]);
+    }
+
+    out.write(reinterpret_cast<const char*>(&s.marks), sizeof(s.marks));
+    out.write(reinterpret_cast<const char*>(&s.avg), sizeof(s.avg));
+}
+
+void fill_bin_file_long(std::ofstream& out, Long_st* mass, int size) {
+    for (int i = 0; i < size; ++i) {
+        write_long_st(out, mass[i]);
     }
 }
 
@@ -469,7 +481,7 @@ Long_st* vedomost_group_alph(Long_st* s, int size, int num) {
             flag = true;
             s_gr[j++] = s[i];
         }
-        else {if (flag) break;}
+        else { if (flag) break; }
     }
     return s_gr;
 }
@@ -487,7 +499,7 @@ int return_best_size(Long_st* s, int size) {
     int size_best{};
 
     for (int i{}; i < size; ++i) {
-        if (s[i].avg >= 8) {
+        if (s[i].avg >= 9) {
             ++size_best;
         }
     }
@@ -499,7 +511,7 @@ Short_st* best_students(Long_st* s, int size) {
     Short_st* st_best = new Short_st[size_best]{};
 
     for (int i1{}, i2{}; (i1 < size) && (i2 < size_best); ++i1) {
-        if (s[i1].avg >= 8) {
+        if (s[i1].avg >= 9) {
             st_best[i2].surname = s[i1].surname;
             st_best[i2].group = s[i1].group;
             st_best[i2].num = s[i1].num;
@@ -530,23 +542,50 @@ Long_st* vedomost_group_avg(Long_st* s, int size, int num) {
     return s_gr;
 }
 
-void write_long_st(std::ofstream& out, const Long_st& s) {
-    write_str(out, s.surname);
-    out.write(reinterpret_cast<const char*>(&s.group), sizeof(s.group));
-    out.write(reinterpret_cast<const char*>(&s.num),   sizeof(s.num));
-
-    for (int i = 0; i < 3; ++i) {
-        write_str(out, s.subj[i]);
+//Á‡‰‡ÌËÂ 4
+void write_long_st_txt(std::ofstream& out, const Long_st& s) {
+    out << "‘¿Ã»À»ﬂ:" << std::setw(10) << s.surname << " √–”œœ¿: " << s.group
+        << " ÕŒÃ≈–: " << s.num << " ";
+    int len = sizeof(s.marks) / sizeof(s.marks[0]);
+    for (int i{}; i < len; ++i) {
+        out << s.subj[i] << ": " << std::setw(2) << s.marks[i] << " ";
     }
-
-    out.write(reinterpret_cast<const char*>(&s.marks), sizeof(s.marks));
-    out.write(reinterpret_cast<const char*>(&s.avg),   sizeof(s.avg));
+    out << "—–: " << s.avg << '\n';
 }
 
-void fill_bin_file_long(std::ofstream& out, Long_st* mass, int size) {
-    for (int i = 0; i < size; ++i) {
-        write_long_st(out, mass[i]);
+void fill_txt_long(std::ofstream& out, Long_st* s, int size) {
+    for (int i{}; i < size; ++i) {
+        write_long_st_txt(out, s[i]);
     }
+}
+
+void write_short_st_txt(std::ofstream& out, const Short_st& s) {
+    out << "‘¿Ã»À»ﬂ:" << std::setw(10) << s.surname << " √–”œœ¿: " << s.group
+        << " ÕŒÃ≈–: " << s.num << '\n';
+}
+
+void fill_txt_short(std::ofstream& out, Short_st* s, int size) {
+    for (int i{}; i < size; ++i) {
+        write_short_st_txt(out, s[i]);
+    }
+}
+
+void print_txt(std::ifstream& in) {
+    std::string line;
+    while (std::getline(in, line)) {
+        std::cout << line << '\n';
+    }
+}
+
+bool cmp_long_avg(const Long_st& a, const Long_st& b) {
+    return a.avg > b.avg;
+}
+
+Long_st* vedomost_group_avg_standart(Long_st* s, int size, int num) {
+    Long_st* s_gr = vedomost_group_alph(s, size, num);
+    int size_gr = size_group(s_gr, size);
+    std::sort(s_gr, s_gr + size_gr, cmp_long_avg);
+    return s_gr;
 }
 
 int main() {
@@ -554,92 +593,94 @@ int main() {
     SetConsoleOutputCP(1251);
 
     std::ifstream fin1("students_name.txt");
-    try {check_file(fin1);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_file(fin1); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     std::ifstream fin2("students_marks.txt");
-    try {check_file(fin2);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_file(fin2); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     int size = return_size(fin1);
 
     std::ofstream fout1("students_name.bin", std::ios::binary);
-    try {check_open_file(fout1);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_open_file(fout1); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     std::ofstream fout2("students_marks.bin", std::ios::binary);
-    try {check_open_file(fout2);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_open_file(fout2); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
-    Student_name* names = fill_mass1(fin1, size);
-    Student_marks* marks = fill_mass2(fin2, size);
+    Student_name* names = fill_mass_name(fin1, size);
+    Student_marks* marks = fill_mass_marks(fin2, size);
 
-    fill_bin_file1(fout1, names, size);
-    fill_bin_file2(fout2, marks, size);
+    fill_bin_file_name(fout1, names, size);
+    fill_bin_file_marks(fout2, marks, size);
 
     fout1.close(); fout2.close();
 
     delete[] names; delete[] marks;
 
     std::ifstream fin_bin1("students_name.bin", std::ios::binary);
-    try {check_file(fin_bin1);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_file(fin_bin1); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     std::ifstream fin_bin2("students_marks.bin", std::ios::binary);
-    try {check_file(fin_bin2);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_file(fin_bin2); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
-    Student_name* stud_name = bin_to_str1(fin_bin1, size);
-    Student_marks* stud_marks = bin_to_str2(fin_bin2, size);
+    Student_name* stud_name = bin_to_str_name(fin_bin1, size);
+    Student_marks* stud_marks = bin_to_str_marks(fin_bin2, size);
 
     std::cout << "—Œƒ≈–∆»ÃŒ≈ œ≈–¬Œ√Œ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿:\n";
-    print_struct1(stud_name, size);
+    print_struct_name(stud_name, size);
     std::cout << "\n—Œƒ≈–∆»ÃŒ≈ ¬“Œ–Œ√Œ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿:\n";
-    print_struct2(stud_marks, size);
+    print_struct_marks(stud_marks, size);
 
     fin_bin1.close(); fin_bin2.close();
 
     //Á‡‰‡ÌËÂ ·
     std::ofstream fout("stud.bin", std::ios::binary);
-    try {check_open_file(fout);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_open_file(fout); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     Student* student = fill_student(stud_name, stud_marks, size);
     fill_bin_file(fout, student, size);
     fout.close();
 
     std::ifstream fin("stud.bin", std::ios::binary);
-    try {check_file(fin);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_file(fin); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     Student* st_gap0 = bin_to_str(fin, size);
     std::cout << "\n—Œƒ≈–∆»ÃŒ≈ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿ «¿ƒ¿Õ»≈ ¡:\n";
     print_struct(st_gap0, size);
     delete[] st_gap0;
+    fin.close();
 
     //Á‡‰‡ÌËÂ ‚
     std::ofstream fout_avg("stud_with_avg.bin", std::ios::binary);
-    try {check_open_file(fout_avg);}
-    catch(const char* msg) {std::cout << msg; return 1;}
-
-    fill_bin_file_with_avg(fout_avg, student, size);
-    fout_avg.close();
+    try { check_open_file(fout_avg); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     Long_st* long_st = st_to_long_st(student, size);
 
+    fill_bin_file_long(fout_avg, long_st, size);
+    fout_avg.close();
+
     std::ifstream fin_avg("stud_with_avg.bin", std::ios::binary);
-    try {check_file(fin_avg);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_file(fin_avg); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     Long_st* long_st_gap0 = bin_to_str_long(fin_avg, size);
     std::cout << "—Œƒ≈–∆»ÃŒ≈ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿ «¿ƒ¿Õ»≈ ¬:\n";
     print_long_st(long_st_gap0, size);
     delete[] long_st_gap0;
+    fin_avg.close();
 
     //«¿ƒ¿Õ»ﬂ √, ƒ, ≈
     std::ofstream bad_before_sort_out("bad_before_sort.bin", std::ios::binary);
-    try {check_open_file(bad_before_sort_out);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_open_file(bad_before_sort_out); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
     int size_bad = return_bad_size(long_st, size);
     Short_st* st_bad1 = bad_students(long_st, size);
@@ -649,34 +690,41 @@ int main() {
     delete[] st_bad1;
 
     std::ifstream bad_before_sort_in("bad_before_sort.bin", std::ios::binary);
-    try {check_file(bad_before_sort_in);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    if (size_bad > 0) {
+        try { check_file(bad_before_sort_in); }
+        catch (const char* msg) { std::cout << msg; return 1; }
 
-    Short_st* st_bad1_gap = bin_to_str_bad(bad_before_sort_in, size_bad);
-    std::cout << "—Œƒ≈–∆»ÃŒ≈ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿ Õ≈”—œ≈¬¿Ÿ»’ —“”ƒ≈Õ“Œ¬ ƒŒ —Œ–“»–Œ¬ »:\n";
-    print_short_st(st_bad1_gap, size_bad);
-    delete[] st_bad1_gap;
+        Short_st* st_bad1_gap = bin_to_str_bad(bad_before_sort_in, size_bad);
+        std::cout << "—Œƒ≈–∆»ÃŒ≈ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿ Õ≈”—œ≈¬¿Ÿ»’ —“”ƒ≈Õ“Œ¬ ƒŒ —Œ–“»–Œ¬ »:\n";
+        print_short_st(st_bad1_gap, size_bad);
+        delete[] st_bad1_gap;
+    }
+    else { std::cout << "—œ»—Œ  Õ≈”—œ≈¬¿ﬁŸ»’ œ”—“\n"; }
+    bad_before_sort_in.close();
 
     struct_sort(long_st, size);
 
     std::ofstream bad_after_sort_out("bad_after_sort.bin", std::ios::binary);
-    try {check_open_file(bad_after_sort_out);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    try { check_open_file(bad_after_sort_out); }
+    catch (const char* msg) { std::cout << msg; return 1; }
 
-    Short_st* st_bad2 = bad_students(long_st, size);
+    Short_st* st_bad_sort = bad_students(long_st, size);
 
-    fill_bin_file_bad(bad_after_sort_out, st_bad2, size_bad);
+    fill_bin_file_bad(bad_after_sort_out, st_bad_sort, size_bad);
     bad_after_sort_out.close();
-    delete[] st_bad2;
 
     std::ifstream bad_after_sort_in("bad_after_sort.bin", std::ios::binary);
-    try {check_file(bad_after_sort_in);}
-    catch(const char* msg) {std::cout << msg; return 1;}
+    if (size_bad > 0) {
+        try { check_file(bad_after_sort_in); }
+        catch (const char* msg) { std::cout << msg; return 1; }
 
-    Short_st* st_bad2_gap = bin_to_str_bad(bad_after_sort_in, size_bad);
-    std::cout << "—Œƒ≈–∆»ÃŒ≈ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿ Õ≈”—œ≈¬¿Ÿ»’ —“”ƒ≈Õ“Œ¬ œŒ—À≈ —Œ–“»–Œ¬ »:\n";
-    print_short_st(st_bad2_gap, size_bad);
-    delete[] st_bad2_gap;
+        Short_st* st_bad2_gap = bin_to_str_bad(bad_after_sort_in, size_bad);
+        std::cout << "—Œƒ≈–∆»ÃŒ≈ ¡»Õ¿–ÕŒ√Œ ‘¿…À¿ Õ≈”—œ≈¬¿Ÿ»’ —“”ƒ≈Õ“Œ¬ œŒ—À≈ —Œ–“»–Œ¬ »:\n";
+        print_short_st(st_bad2_gap, size_bad);
+        delete[] st_bad2_gap;
+    }
+    else { std::cout << "—œ»—Œ  Õ≈”—œ≈¬¿ﬁŸ»’ œ”—“\n"; }
+    bad_after_sort_in.close();
 
     //Á‡‰‡ÌËÂ Ê
     int num1 = 4;
@@ -694,17 +742,20 @@ int main() {
     fout_g.close();
 
     std::ifstream fin_g("vedomost_group.bin", std::ios::binary);
-    try { check_file(fin_g); }
-    catch (const char* msg) { std::cout << msg; return 1; }
+    if (size_gr1 > 0) {
+        try { check_file(fin_g); }
+        catch (const char* msg) { std::cout << msg; return 1; }
 
-    Long_st* s_gr1_from_file = bin_to_str_long(fin_g, size_gr1);
+        Long_st* s_gr1_from_file = bin_to_str_long(fin_g, size_gr1);
+        fin_g.close();
+
+        std::cout << "¬≈ƒŒÃŒ—“‹ √–”œœ€ " << num1 << " (œŒ ¿À‘¿¬»“”):\n";
+        print_long_st(s_gr1_from_file, size_gr1);
+
+        delete[] s_gr1_from_file;
+    }
+    else { std::cout << "“¿ Œ… √–”œœ€ Õ≈“\n"; }
     fin_g.close();
-
-    std::cout << "¬≈ƒŒÃŒ—“‹ √–”œœ€ " << num1 << " (œŒ ¿À‘¿¬»“”):\n";
-    print_long_st(s_gr1_from_file, size_gr1);
-
-    delete[] s_gr1_from_file;
-    delete[] s_gr1;
 
     //Á‡‰‡ÌËÂ Á
     int num2 = 5;
@@ -722,17 +773,20 @@ int main() {
     fout_h.close();
 
     std::ifstream fin_h("vedomost_group_avg.bin", std::ios::binary);
-    try { check_file(fin_h); }
-    catch (const char* msg) { std::cout << msg; return 1; }
+    if (size_gr2 > 0) {
+        try { check_file(fin_h); }
+        catch (const char* msg) { std::cout << msg; return 1; }
 
-    Long_st* s_gr2_from_file = bin_to_str_long(fin_h, size_gr2);
+        Long_st* s_gr2_from_file = bin_to_str_long(fin_h, size_gr2);
+        fin_h.close();
+
+        std::cout << "¬≈ƒŒÃŒ—“‹ √–”œœ€ " << num2 << " (œŒ ”¡€¬¿Õ»ﬁ —–.¡¿ÀÀ¿):\n";
+        print_long_st(s_gr2_from_file, size_gr2);
+
+        delete[] s_gr2_from_file;
+    }
+    else { std::cout << "“¿ Œ… √–”œœ€ Õ≈“\n"; }
     fin_h.close();
-
-    std::cout << "¬≈ƒŒÃŒ—“‹ √–”œœ€ " << num2 << " (œŒ ”¡€¬¿Õ»ﬁ —–.¡¿ÀÀ¿):\n";
-    print_long_st(s_gr2_from_file, size_gr2);
-
-    delete[] s_gr2_from_file;
-    delete[] s_gr2;
 
     //Á‡‰‡ÌËÂ Ë
     int best_size = return_best_size(long_st, size);
@@ -758,13 +812,106 @@ int main() {
 
         delete[] st_best_from_file;
     }
-    else {
-        std::cout << "—œ»—Œ  Œ“À»◊Õ» Œ¬ œ”—“\n";
+    else { std::cout << "—œ»—Œ  Œ“À»◊Õ» Œ¬ œ”—“\n"; }
+    fin_best.close();
+
+    //Á‡‰‡ÌËÂ 4
+    std::ofstream fout_avg_txt("st_avg_txt.txt");
+    try { check_open_file(fout_avg_txt); }
+    catch (const char* msg) { std::cout << msg; return 1; }
+
+    fill_txt_long(fout_avg_txt, long_st, size);
+    fout_avg_txt.close();
+
+    std::ifstream fin_avg_txt("st_avg_txt.txt");
+    try { check_file(fin_avg_txt); }
+    catch (const char* msg) { std::cout << msg; return 1; }
+
+    for (int i{}; i < 100; ++i) std::cout << "-";
+    std::cout << "\nœ–≈ƒ—“¿¬À≈Õ»≈ “≈ —“Œ¬€’ ‘¿…ÀŒ¬:\n";
+
+    std::cout << "\n—“”ƒ≈Õ“€ —Œ —–≈ƒÕ»Ã» ¡¿ÀÀ¿Ã»:\n";
+    print_txt(fin_avg_txt);
+    fin_avg_txt.close();
+
+    std::ofstream fout_bad_txt("bad_st_txt.txt");
+    try { check_open_file(fout_bad_txt); }
+    catch (const char* msg) { std::cout << msg; return 1; }
+
+    fill_txt_short(fout_bad_txt, st_bad_sort, size_bad);
+    fout_bad_txt.close();
+
+    std::ifstream fin_bad_txt("bad_st_txt.txt");
+    if (size_bad > 0) {
+        try { check_file(fin_bad_txt); }
+        catch (const char* msg) { std::cout << msg; return 1; }
+
+        std::cout << "\nÕ≈”—œ≈¬¿ﬁŸ»≈, Œ“—Œ–“»–Œ¬¿ÕÕ€≈ œŒ √–”œœ¿Ã » ¿À‘¿¬»“”\n";
+        print_txt(fin_bad_txt);
     }
+    else { std::cout << "—œ»—Œ  Õ≈”—œ≈¬¿ﬁŸ»’ œ”—“\n"; }
+    fin_bad_txt.close();
+
+    std::ofstream out_group_alph_txt("ved1_txt.txt");
+    try { check_open_file(out_group_alph_txt); }
+    catch (const char* msg) { std::cout << msg; return 1; }
+
+    fill_txt_long(out_group_alph_txt, s_gr1, size_gr1);
+    out_group_alph_txt.close();
+
+    std::ifstream in_group_alph_txt("ved1_txt.txt");
+    if (size_gr1 > 0) {
+        try { check_file(in_group_alph_txt); }
+        catch (const char* msg) { std::cout << msg; return 1; }
+
+        std::cout << "\n¬≈ƒŒÃŒ—“‹ √–”œœ€ " << num1 << " (œŒ ¿À‘¿¬»“”, —¬Œﬂ —Œ–“»–Œ¬ ¿):\n";
+        print_txt(in_group_alph_txt);
+    }
+    else { std::cout << "“¿ Œ… √–”œœ€ Õ≈“\n"; }
+    in_group_alph_txt.close();
+
+    std::ofstream out_group_avg_txt("ved2_txt.txt");
+    try { check_open_file(out_group_avg_txt); }
+    catch (const char* msg) { std::cout << msg; return 1; }
+
+    Long_st* s_gr22 = vedomost_group_avg_standart(long_st, size, num2);
+    fill_txt_long(out_group_avg_txt, s_gr22, size_gr2);
+    out_group_avg_txt.close();
+
+    std::ifstream in_group_avg_txt("ved2_txt.txt");
+    if (size_gr2 > 0) {
+        try { check_file(in_group_avg_txt); }
+        catch (const char* msg) { std::cout << msg; return 1; }
+
+        std::cout << "\n¬≈ƒŒÃŒ—“‹ √–”œœ€ " << num2 << " (œŒ —–.¡¿ÀÀ”, —“¿Õƒ¿–“Õ¿ﬂ —Œ–“»–Œ¬ ¿):\n";
+        print_txt(in_group_avg_txt);
+    }
+    else { std::cout << "“¿ Œ… √–”œœ€ Õ≈“\n"; }
+    in_group_avg_txt.close();
+
+    std::ofstream out_best_txt("best_txt.txt");
+    try { check_open_file(out_best_txt); }
+    catch (const char* msg) { std::cout << msg; return 1; }
+
+    fill_txt_short(out_best_txt, st_best, best_size);
+    out_best_txt.close();
+
+    std::ifstream in_best_txt("best_txt.txt");
+    if (best_size > 0) {
+        try { check_file(in_best_txt); }
+        catch (const char* msg) { std::cout << msg; return 1; }
+
+        std::cout << "\n—œ»—Œ  Œ“À»◊Õ» Œ¬:\n";
+        print_txt(in_best_txt);
+    }
+    else { std::cout << "\n—œ»—Œ  Œ“À»◊Õ» Œ¬ œ”—“\n"; }
+    in_best_txt.close();
 
     delete[] st_best;
-
-
+    delete[] s_gr22;
+    delete[] s_gr1;
+    delete[] s_gr2;
+    delete[] st_bad_sort;
     delete[] stud_name;
     delete[] stud_marks;
     delete[] student;
