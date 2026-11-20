@@ -40,7 +40,7 @@ struct Short_st {
     int group, num;
 };
 
-//çàäàíèå a
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ a
 void check_file(std::ifstream& file) {
     if (!file.is_open()) throw "file error open";
     if (file.peek() == EOF) throw "file error empty";
@@ -138,7 +138,7 @@ bool read_str(std::ifstream& file, std::string& s) {
     file.read(reinterpret_cast<char*>(&len), sizeof(len));
     if (!file) return {};
     s.resize(len);
-    return static_cast<bool>(file.read(const_cast<char*>(s.data()), len));
+    return static_cast<bool>(file.read(&s[0], len));
 }
 
 void write_student_name(std::ofstream& out, const Student_name& s) {
@@ -225,7 +225,7 @@ void print_struct_marks(Student_marks* s, int size) {
     }
 }
 
-//çàäàíèå á
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¡
 Student* fill_student(Student_name* s1, Student_marks* s2, int size) {
     Student* s = new Student[size]{};
     for (int i{}; i < size; ++i) {
@@ -299,7 +299,7 @@ void print_struct(Student* s, int size) {
     std::cout << '\n';
 }
 
-//çàäàíèå â
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¢
 double avg(int* mass, int len) {
     double total{};
     for (int i{}; i < len; ++i) total += mass[i];
@@ -367,7 +367,7 @@ Long_st* bin_to_str_long(std::ifstream& in, int size) {
     return s;
 }
 
-//çàäàíèå ã
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã£
 int return_bad_size(Long_st* s, int size) {
     int size_bad{};
 
@@ -431,7 +431,7 @@ Short_st* bin_to_str_bad(std::ifstream& in, int size) {
     return s;
 }
 
-//ôóíêöèÿ ñîðòèðîâêè ïî ãðóïïàì è ïî ôàìèëèÿì
+//Ã´Ã³Ã­ÃªÃ¶Ã¨Ã¿ Ã±Ã®Ã°Ã²Ã¨Ã°Ã®Ã¢ÃªÃ¨ Ã¯Ã® Ã£Ã°Ã³Ã¯Ã¯Ã Ã¬ Ã¨ Ã¯Ã® Ã´Ã Ã¬Ã¨Ã«Ã¨Ã¿Ã¬
 void struct_sort(Long_st* s, int size) {
     for (int i{}; i < size - 1; ++i) {
         bool flag = false;
@@ -452,7 +452,7 @@ void struct_sort(Long_st* s, int size) {
 }
 
 void print_short_st(Short_st* s, int size) {
-    if (size == 0) std::cout << "ÑÏÈÑÎÊ ÏÓÑÒ\n";
+    if (size == 0) std::cout << "Ã‘ÃÃˆÃ‘ÃŽÃŠ ÃÃ“Ã‘Ã’\n";
     for (int i{}; i < size; ++i) {
         std::cout << s[i].surname << " ";
         std::cout << s[i].group << " " << s[i].num << '\n';
@@ -472,7 +472,7 @@ void print_long_st(Long_st* s, int size) {
     std::cout << '\n';
 }
 
-//çàäàíèå æ
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¦
 Long_st* vedomost_group_alph(Long_st* s, int size, int num) {
     Long_st* s_gr = new Long_st[size]{};
     bool flag = false;
@@ -494,7 +494,7 @@ int size_group(Long_st* s_gr, int size) {
     return counter;
 }
 
-//çàäàíèå è
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¨
 int return_best_size(Long_st* s, int size) {
     int size_best{};
 
@@ -521,7 +521,7 @@ Short_st* best_students(Long_st* s, int size) {
     return st_best;
 }
 
-//çàäàíèå ç
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã§
 void struct_sort_avg(Long_st* s, int size) {
     for (int i{}; i < size - 1; ++i) {
         bool flag = false;
@@ -542,15 +542,15 @@ Long_st* vedomost_group_avg(Long_st* s, int size, int num) {
     return s_gr;
 }
 
-//çàäàíèå 4
+//Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ 4
 void write_long_st_txt(std::ofstream& out, const Long_st& s) {
-    out << "ÔÀÌÈËÈß:" << std::setw(10) << s.surname << " ÃÐÓÏÏÀ: " << s.group
-        << " ÍÎÌÅÐ: " << s.num << " ";
+    out << "Ã”Ã€ÃŒÃˆÃ‹ÃˆÃŸ:" << std::setw(10) << s.surname << " ÃƒÃÃ“ÃÃÃ€: " << s.group
+        << " ÃÃŽÃŒÃ…Ã: " << s.num << " ";
     int len = sizeof(s.marks) / sizeof(s.marks[0]);
     for (int i{}; i < len; ++i) {
         out << s.subj[i] << ": " << std::setw(2) << s.marks[i] << " ";
     }
-    out << "ÑÐ: " << s.avg << '\n';
+    out << "Ã‘Ã: " << s.avg << '\n';
 }
 
 void fill_txt_long(std::ofstream& out, Long_st* s, int size) {
@@ -560,8 +560,8 @@ void fill_txt_long(std::ofstream& out, Long_st* s, int size) {
 }
 
 void write_short_st_txt(std::ofstream& out, const Short_st& s) {
-    out << "ÔÀÌÈËÈß:" << std::setw(10) << s.surname << " ÃÐÓÏÏÀ: " << s.group
-        << " ÍÎÌÅÐ: " << s.num << '\n';
+    out << "Ã”Ã€ÃŒÃˆÃ‹ÃˆÃŸ:" << std::setw(10) << s.surname << " ÃƒÃÃ“ÃÃÃ€: " << s.group
+        << " ÃÃŽÃŒÃ…Ã: " << s.num << '\n';
 }
 
 void fill_txt_short(std::ofstream& out, Short_st* s, int size) {
@@ -631,14 +631,14 @@ int main() {
     Student_name* stud_name = bin_to_str_name(fin_bin1, size);
     Student_marks* stud_marks = bin_to_str_marks(fin_bin2, size);
 
-    std::cout << "ÑÎÄÅÐÆÈÌÎÅ ÏÅÐÂÎÃÎ ÁÈÍÀÐÍÎÃÎ ÔÀÉËÀ:\n";
+    std::cout << "Ã‘ÃŽÃ„Ã…ÃÃ†ÃˆÃŒÃŽÃ… ÃÃ…ÃÃ‚ÃŽÃƒÃŽ ÃÃˆÃÃ€ÃÃÃŽÃƒÃŽ Ã”Ã€Ã‰Ã‹Ã€:\n";
     print_struct_name(stud_name, size);
-    std::cout << "\nÑÎÄÅÐÆÈÌÎÅ ÂÒÎÐÎÃÎ ÁÈÍÀÐÍÎÃÎ ÔÀÉËÀ:\n";
+    std::cout << "\nÃ‘ÃŽÃ„Ã…ÃÃ†ÃˆÃŒÃŽÃ… Ã‚Ã’ÃŽÃÃŽÃƒÃŽ ÃÃˆÃÃ€ÃÃÃŽÃƒÃŽ Ã”Ã€Ã‰Ã‹Ã€:\n";
     print_struct_marks(stud_marks, size);
 
     fin_bin1.close(); fin_bin2.close();
 
-    //çàäàíèå á
+    //Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¡
     std::ofstream fout("stud.bin", std::ios::binary);
     try { check_open_file(fout); }
     catch (const char* msg) { std::cout << msg; return 1; }
@@ -652,12 +652,12 @@ int main() {
     catch (const char* msg) { std::cout << msg; return 1; }
 
     Student* st_gap0 = bin_to_str(fin, size);
-    std::cout << "\nÑÎÄÅÐÆÈÌÎÅ ÁÈÍÀÐÍÎÃÎ ÔÀÉËÀ ÇÀÄÀÍÈÅ Á:\n";
+    std::cout << "\nÃ‘ÃŽÃ„Ã…ÃÃ†ÃˆÃŒÃŽÃ… ÃÃˆÃÃ€ÃÃÃŽÃƒÃŽ Ã”Ã€Ã‰Ã‹Ã€ Ã‡Ã€Ã„Ã€ÃÃˆÃ… Ã:\n";
     print_struct(st_gap0, size);
     delete[] st_gap0;
     fin.close();
 
-    //çàäàíèå â
+    //Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¢
     std::ofstream fout_avg("stud_with_avg.bin", std::ios::binary);
     try { check_open_file(fout_avg); }
     catch (const char* msg) { std::cout << msg; return 1; }
@@ -672,12 +672,12 @@ int main() {
     catch (const char* msg) { std::cout << msg; return 1; }
 
     Long_st* long_st_gap0 = bin_to_str_long(fin_avg, size);
-    std::cout << "ÑÎÄÅÐÆÈÌÎÅ ÁÈÍÀÐÍÎÃÎ ÔÀÉËÀ ÇÀÄÀÍÈÅ Â:\n";
+    std::cout << "Ã‘ÃŽÃ„Ã…ÃÃ†ÃˆÃŒÃŽÃ… ÃÃˆÃÃ€ÃÃÃŽÃƒÃŽ Ã”Ã€Ã‰Ã‹Ã€ Ã‡Ã€Ã„Ã€ÃÃˆÃ… Ã‚:\n";
     print_long_st(long_st_gap0, size);
     delete[] long_st_gap0;
     fin_avg.close();
 
-    //ÇÀÄÀÍÈß Ã, Ä, Å
+    //Ã‡Ã€Ã„Ã€ÃÃˆÃŸ Ãƒ, Ã„, Ã…
     std::ofstream bad_before_sort_out("bad_before_sort.bin", std::ios::binary);
     try { check_open_file(bad_before_sort_out); }
     catch (const char* msg) { std::cout << msg; return 1; }
@@ -695,11 +695,11 @@ int main() {
         catch (const char* msg) { std::cout << msg; return 1; }
 
         Short_st* st_bad1_gap = bin_to_str_bad(bad_before_sort_in, size_bad);
-        std::cout << "ÑÎÄÅÐÆÈÌÎÅ ÁÈÍÀÐÍÎÃÎ ÔÀÉËÀ ÍÅÓÑÏÅÂÀÙÈÕ ÑÒÓÄÅÍÒÎÂ ÄÎ ÑÎÐÒÈÐÎÂÊÈ:\n";
+        std::cout << "Ã‘ÃŽÃ„Ã…ÃÃ†ÃˆÃŒÃŽÃ… ÃÃˆÃÃ€ÃÃÃŽÃƒÃŽ Ã”Ã€Ã‰Ã‹Ã€ ÃÃ…Ã“Ã‘ÃÃ…Ã‚Ã€Ã™ÃˆÃ• Ã‘Ã’Ã“Ã„Ã…ÃÃ’ÃŽÃ‚ Ã„ÃŽ Ã‘ÃŽÃÃ’ÃˆÃÃŽÃ‚ÃŠÃˆ:\n";
         print_short_st(st_bad1_gap, size_bad);
         delete[] st_bad1_gap;
     }
-    else { std::cout << "ÑÏÈÑÎÊ ÍÅÓÑÏÅÂÀÞÙÈÕ ÏÓÑÒ\n"; }
+    else { std::cout << "Ã‘ÃÃˆÃ‘ÃŽÃŠ ÃÃ…Ã“Ã‘ÃÃ…Ã‚Ã€ÃžÃ™ÃˆÃ• ÃÃ“Ã‘Ã’\n"; }
     bad_before_sort_in.close();
 
     struct_sort(long_st, size);
@@ -719,16 +719,16 @@ int main() {
         catch (const char* msg) { std::cout << msg; return 1; }
 
         Short_st* st_bad2_gap = bin_to_str_bad(bad_after_sort_in, size_bad);
-        std::cout << "ÑÎÄÅÐÆÈÌÎÅ ÁÈÍÀÐÍÎÃÎ ÔÀÉËÀ ÍÅÓÑÏÅÂÀÙÈÕ ÑÒÓÄÅÍÒÎÂ ÏÎÑËÅ ÑÎÐÒÈÐÎÂÊÈ:\n";
+        std::cout << "Ã‘ÃŽÃ„Ã…ÃÃ†ÃˆÃŒÃŽÃ… ÃÃˆÃÃ€ÃÃÃŽÃƒÃŽ Ã”Ã€Ã‰Ã‹Ã€ ÃÃ…Ã“Ã‘ÃÃ…Ã‚Ã€Ã™ÃˆÃ• Ã‘Ã’Ã“Ã„Ã…ÃÃ’ÃŽÃ‚ ÃÃŽÃ‘Ã‹Ã… Ã‘ÃŽÃÃ’ÃˆÃÃŽÃ‚ÃŠÃˆ:\n";
         print_short_st(st_bad2_gap, size_bad);
         delete[] st_bad2_gap;
     }
-    else { std::cout << "ÑÏÈÑÎÊ ÍÅÓÑÏÅÂÀÞÙÈÕ ÏÓÑÒ\n"; }
+    else { std::cout << "Ã‘ÃÃˆÃ‘ÃŽÃŠ ÃÃ…Ã“Ã‘ÃÃ…Ã‚Ã€ÃžÃ™ÃˆÃ• ÃÃ“Ã‘Ã’\n"; }
     bad_after_sort_in.close();
 
-    //çàäàíèå æ
+    //Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¦
     int num1 = 4;
-    std::cout << "ÍÎÌÅÐ ÃÐÓÏÏÛ ÄËß ÔÎÐÌÈÐÎÂÀÍÈß ÂÅÄÎÌÎÑÒÈ ÎÖÅÍÎÊ (ÓÏÎÐßÄÎ×ÅÍÛ ÏÎ ÀËÔÀÂÈÒÓ): " << num1 << '\n';
+    std::cout << "ÃÃŽÃŒÃ…Ã ÃƒÃÃ“ÃÃÃ› Ã„Ã‹ÃŸ Ã”ÃŽÃÃŒÃˆÃÃŽÃ‚Ã€ÃÃˆÃŸ Ã‚Ã…Ã„ÃŽÃŒÃŽÃ‘Ã’Ãˆ ÃŽÃ–Ã…ÃÃŽÃŠ (Ã“ÃÃŽÃÃŸÃ„ÃŽÃ—Ã…ÃÃ› ÃÃŽ Ã€Ã‹Ã”Ã€Ã‚ÃˆÃ’Ã“): " << num1 << '\n';
     //std::cin >> num1;
 
     Long_st* s_gr1 = vedomost_group_alph(long_st, size, num1);
@@ -749,17 +749,17 @@ int main() {
         Long_st* s_gr1_from_file = bin_to_str_long(fin_g, size_gr1);
         fin_g.close();
 
-        std::cout << "ÂÅÄÎÌÎÑÒÜ ÃÐÓÏÏÛ " << num1 << " (ÏÎ ÀËÔÀÂÈÒÓ):\n";
+        std::cout << "Ã‚Ã…Ã„ÃŽÃŒÃŽÃ‘Ã’Ãœ ÃƒÃÃ“ÃÃÃ› " << num1 << " (ÃÃŽ Ã€Ã‹Ã”Ã€Ã‚ÃˆÃ’Ã“):\n";
         print_long_st(s_gr1_from_file, size_gr1);
 
         delete[] s_gr1_from_file;
     }
-    else { std::cout << "ÒÀÊÎÉ ÃÐÓÏÏÛ ÍÅÒ\n"; }
+    else { std::cout << "Ã’Ã€ÃŠÃŽÃ‰ ÃƒÃÃ“ÃÃÃ› ÃÃ…Ã’\n"; }
     fin_g.close();
 
-    //çàäàíèå ç
+    //Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã§
     int num2 = 5;
-    std::cout << "ÍÎÌÅÐ ÃÐÓÏÏÛ ÄËß ÔÎÐÌÈÐÎÂÀÍÈß ÂÅÄÎÌÎÑÒÈ ÎÖÅÍÎÊ (ÓÏÎÐßÄÎ×ÅÍÛ ÏÎ ÑÐ.ÁÀËËÓ): " << num2 << '\n';
+    std::cout << "ÃÃŽÃŒÃ…Ã ÃƒÃÃ“ÃÃÃ› Ã„Ã‹ÃŸ Ã”ÃŽÃÃŒÃˆÃÃŽÃ‚Ã€ÃÃˆÃŸ Ã‚Ã…Ã„ÃŽÃŒÃŽÃ‘Ã’Ãˆ ÃŽÃ–Ã…ÃÃŽÃŠ (Ã“ÃÃŽÃÃŸÃ„ÃŽÃ—Ã…ÃÃ› ÃÃŽ Ã‘Ã.ÃÃ€Ã‹Ã‹Ã“): " << num2 << '\n';
     //std::cin >> num2;
 
     Long_st* s_gr2 = vedomost_group_avg(long_st, size, num2);
@@ -780,15 +780,15 @@ int main() {
         Long_st* s_gr2_from_file = bin_to_str_long(fin_h, size_gr2);
         fin_h.close();
 
-        std::cout << "ÂÅÄÎÌÎÑÒÜ ÃÐÓÏÏÛ " << num2 << " (ÏÎ ÓÁÛÂÀÍÈÞ ÑÐ.ÁÀËËÀ):\n";
+        std::cout << "Ã‚Ã…Ã„ÃŽÃŒÃŽÃ‘Ã’Ãœ ÃƒÃÃ“ÃÃÃ› " << num2 << " (ÃÃŽ Ã“ÃÃ›Ã‚Ã€ÃÃˆÃž Ã‘Ã.ÃÃ€Ã‹Ã‹Ã€):\n";
         print_long_st(s_gr2_from_file, size_gr2);
 
         delete[] s_gr2_from_file;
     }
-    else { std::cout << "ÒÀÊÎÉ ÃÐÓÏÏÛ ÍÅÒ\n"; }
+    else { std::cout << "Ã’Ã€ÃŠÃŽÃ‰ ÃƒÃÃ“ÃÃÃ› ÃÃ…Ã’\n"; }
     fin_h.close();
 
-    //çàäàíèå è
+    //Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ Ã¨
     int best_size = return_best_size(long_st, size);
     Short_st* st_best = best_students(long_st, size);
 
@@ -800,22 +800,22 @@ int main() {
     fout_best.close();
 
     std::ifstream fin_best("otlichniki.bin", std::ios::binary);
-    if (best_size > 0) { //ìîæåò âûêèíóòü îøèáêó â ïðîò. ñëó÷àå
+    if (best_size > 0) { //Ã¬Ã®Ã¦Ã¥Ã² Ã¢Ã»ÃªÃ¨Ã­Ã³Ã²Ã¼ Ã®Ã¸Ã¨Ã¡ÃªÃ³ Ã¢ Ã¯Ã°Ã®Ã². Ã±Ã«Ã³Ã·Ã Ã¥
         try { check_file(fin_best); }
         catch (const char* msg) { std::cout << msg; return 1; }
 
         Short_st* st_best_from_file = bin_to_str_bad(fin_best, best_size);
         fin_best.close();
 
-        std::cout << "ÑÏÈÑÎÊ ÎÒËÈ×ÍÈÊÎÂ:\n";
+        std::cout << "Ã‘ÃÃˆÃ‘ÃŽÃŠ ÃŽÃ’Ã‹ÃˆÃ—ÃÃˆÃŠÃŽÃ‚:\n";
         print_short_st(st_best_from_file, best_size);
 
         delete[] st_best_from_file;
     }
-    else { std::cout << "ÑÏÈÑÎÊ ÎÒËÈ×ÍÈÊÎÂ ÏÓÑÒ\n"; }
+    else { std::cout << "Ã‘ÃÃˆÃ‘ÃŽÃŠ ÃŽÃ’Ã‹ÃˆÃ—ÃÃˆÃŠÃŽÃ‚ ÃÃ“Ã‘Ã’\n"; }
     fin_best.close();
 
-    //çàäàíèå 4
+    //Ã§Ã Ã¤Ã Ã­Ã¨Ã¥ 4
     std::ofstream fout_avg_txt("st_avg_txt.txt");
     try { check_open_file(fout_avg_txt); }
     catch (const char* msg) { std::cout << msg; return 1; }
@@ -828,9 +828,9 @@ int main() {
     catch (const char* msg) { std::cout << msg; return 1; }
 
     for (int i{}; i < 100; ++i) std::cout << "-";
-    std::cout << "\nÏÐÅÄÑÒÀÂËÅÍÈÅ ÒÅÊÑÒÎÂÛÕ ÔÀÉËÎÂ:\n";
+    std::cout << "\nÃÃÃ…Ã„Ã‘Ã’Ã€Ã‚Ã‹Ã…ÃÃˆÃ… Ã’Ã…ÃŠÃ‘Ã’ÃŽÃ‚Ã›Ã• Ã”Ã€Ã‰Ã‹ÃŽÃ‚:\n";
 
-    std::cout << "\nÑÒÓÄÅÍÒÛ ÑÎ ÑÐÅÄÍÈÌÈ ÁÀËËÀÌÈ:\n";
+    std::cout << "\nÃ‘Ã’Ã“Ã„Ã…ÃÃ’Ã› Ã‘ÃŽ Ã‘ÃÃ…Ã„ÃÃˆÃŒÃˆ ÃÃ€Ã‹Ã‹Ã€ÃŒÃˆ:\n";
     print_txt(fin_avg_txt);
     fin_avg_txt.close();
 
@@ -846,10 +846,10 @@ int main() {
         try { check_file(fin_bad_txt); }
         catch (const char* msg) { std::cout << msg; return 1; }
 
-        std::cout << "\nÍÅÓÑÏÅÂÀÞÙÈÅ, ÎÒÑÎÐÒÈÐÎÂÀÍÍÛÅ ÏÎ ÃÐÓÏÏÀÌ È ÀËÔÀÂÈÒÓ\n";
+        std::cout << "\nÃÃ…Ã“Ã‘ÃÃ…Ã‚Ã€ÃžÃ™ÃˆÃ…, ÃŽÃ’Ã‘ÃŽÃÃ’ÃˆÃÃŽÃ‚Ã€ÃÃÃ›Ã… ÃÃŽ ÃƒÃÃ“ÃÃÃ€ÃŒ Ãˆ Ã€Ã‹Ã”Ã€Ã‚ÃˆÃ’Ã“\n";
         print_txt(fin_bad_txt);
     }
-    else { std::cout << "ÑÏÈÑÎÊ ÍÅÓÑÏÅÂÀÞÙÈÕ ÏÓÑÒ\n"; }
+    else { std::cout << "Ã‘ÃÃˆÃ‘ÃŽÃŠ ÃÃ…Ã“Ã‘ÃÃ…Ã‚Ã€ÃžÃ™ÃˆÃ• ÃÃ“Ã‘Ã’\n"; }
     fin_bad_txt.close();
 
     std::ofstream out_group_alph_txt("ved1_txt.txt");
@@ -864,10 +864,10 @@ int main() {
         try { check_file(in_group_alph_txt); }
         catch (const char* msg) { std::cout << msg; return 1; }
 
-        std::cout << "\nÂÅÄÎÌÎÑÒÜ ÃÐÓÏÏÛ " << num1 << " (ÏÎ ÀËÔÀÂÈÒÓ, ÑÂÎß ÑÎÐÒÈÐÎÂÊÀ):\n";
+        std::cout << "\nÃ‚Ã…Ã„ÃŽÃŒÃŽÃ‘Ã’Ãœ ÃƒÃÃ“ÃÃÃ› " << num1 << " (ÃÃŽ Ã€Ã‹Ã”Ã€Ã‚ÃˆÃ’Ã“, Ã‘Ã‚ÃŽÃŸ Ã‘ÃŽÃÃ’ÃˆÃÃŽÃ‚ÃŠÃ€):\n";
         print_txt(in_group_alph_txt);
     }
-    else { std::cout << "ÒÀÊÎÉ ÃÐÓÏÏÛ ÍÅÒ\n"; }
+    else { std::cout << "Ã’Ã€ÃŠÃŽÃ‰ ÃƒÃÃ“ÃÃÃ› ÃÃ…Ã’\n"; }
     in_group_alph_txt.close();
 
     std::ofstream out_group_avg_txt("ved2_txt.txt");
@@ -883,10 +883,10 @@ int main() {
         try { check_file(in_group_avg_txt); }
         catch (const char* msg) { std::cout << msg; return 1; }
 
-        std::cout << "\nÂÅÄÎÌÎÑÒÜ ÃÐÓÏÏÛ " << num2 << " (ÏÎ ÑÐ.ÁÀËËÓ, ÑÒÀÍÄÀÐÒÍÀß ÑÎÐÒÈÐÎÂÊÀ):\n";
+        std::cout << "\nÃ‚Ã…Ã„ÃŽÃŒÃŽÃ‘Ã’Ãœ ÃƒÃÃ“ÃÃÃ› " << num2 << " (ÃÃŽ Ã‘Ã.ÃÃ€Ã‹Ã‹Ã“, Ã‘Ã’Ã€ÃÃ„Ã€ÃÃ’ÃÃ€ÃŸ Ã‘ÃŽÃÃ’ÃˆÃÃŽÃ‚ÃŠÃ€):\n";
         print_txt(in_group_avg_txt);
     }
-    else { std::cout << "ÒÀÊÎÉ ÃÐÓÏÏÛ ÍÅÒ\n"; }
+    else { std::cout << "Ã’Ã€ÃŠÃŽÃ‰ ÃƒÃÃ“ÃÃÃ› ÃÃ…Ã’\n"; }
     in_group_avg_txt.close();
 
     std::ofstream out_best_txt("best_txt.txt");
@@ -901,10 +901,10 @@ int main() {
         try { check_file(in_best_txt); }
         catch (const char* msg) { std::cout << msg; return 1; }
 
-        std::cout << "\nÑÏÈÑÎÊ ÎÒËÈ×ÍÈÊÎÂ:\n";
+        std::cout << "\nÃ‘ÃÃˆÃ‘ÃŽÃŠ ÃŽÃ’Ã‹ÃˆÃ—ÃÃˆÃŠÃŽÃ‚:\n";
         print_txt(in_best_txt);
     }
-    else { std::cout << "\nÑÏÈÑÎÊ ÎÒËÈ×ÍÈÊÎÂ ÏÓÑÒ\n"; }
+    else { std::cout << "\nÃ‘ÃÃˆÃ‘ÃŽÃŠ ÃŽÃ’Ã‹ÃˆÃ—ÃÃˆÃŠÃŽÃ‚ ÃÃ“Ã‘Ã’\n"; }
     in_best_txt.close();
 
     delete[] st_best;
